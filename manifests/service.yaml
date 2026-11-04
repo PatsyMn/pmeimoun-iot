@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wil-playground
+spec:
+  type: LoadBalancer                   # ouvre le port 8888 sur le nœud,
+                                       # pour que "curl localhost:8888" marche depuis IOT
+  selector:
+    app: wil-playground                # envoie vers le pod portant cette étiquette
+  ports:
+    - port: 8888                       # Service:8888 -> conteneur:8888
+      targetPort: 8888
