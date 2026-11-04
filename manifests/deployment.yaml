@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: wil-playground
-          image: wil42/playground:v1   # l'appli de Wil, version v1 (à changer en v2)
+          image: wil42/playground:v2   # l'appli de Wil, version v1 (à changer en v2)
           ports:
             - containerPort: 8888      # l'appli de Wil écoute sur 8888
 ---
