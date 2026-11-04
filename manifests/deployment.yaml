@@ -1,31 +1,82 @@
+cat > manifests/deployment.yaml << 'EOF'
+# =====================================================================
+# deployment.yaml — Appli de Wil, déployée par Argo CD dans "dev"
+# Pour changer de version : remplacer v1 par v2 dans "image", puis git push
+# =====================================================================
+
+# --- Deployment : lance et surveille le pod de l'appli ---------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wil-playground
 spec:
-  replicas: 1
+  replicas: 1                          # un seul pod
   selector:
     matchLabels:
-      app: wil-playground
+      app: wil-playground              # le Deployment gère les pods portant cette étiquette
   template:
     metadata:
       labels:
-        app: wil-playground
+        app: wil-playground            # l'étiquette posée sur le pod
     spec:
       containers:
         - name: wil-playground
-          image: wil42/playground:v1
+          image: wil42/playground:v1   # l'appli de Wil, version v1 (à changer en v2)
           ports:
-            - containerPort: 8888
+            - containerPort: 8888      # l'appli de Wil écoute sur 8888
 ---
+# --- Service : une adresse fixe pour joindre le pod -----------------
 apiVersion: v1
 kind: Service
 metadata:
   name: wil-playground
 spec:
-  type: LoadBalancer
+  type: LoadBalancer                   # ouvre le port 8888 sur le nœud,
+                                       # pour que "curl localhost:8888" marche depuis IOT
   selector:
-    app: wil-playground
+    app: wil-playground                # envoie vers le pod portant cette étiquette
   ports:
-    - port: 8888
+    - port: 8888                       # Service:8888 -> conteneur:8888
+      targetPort: 8888 EOF
+cat > manifests/deployment.yaml << 'EOF'
+cat > manifests/deployment.yaml << 'EOF'
+# =====================================================================
+# deployment.yaml — Appli de Wil, déployée par Argo CD dans "dev"
+# Pour changer de version : remplacer v1 par v2 dans "image", puis git push
+# =====================================================================
+
+# --- Deployment : lance et surveille le pod de l'appli ---------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wil-playground
+spec:
+  replicas: 1                          # un seul pod
+  selector:
+    matchLabels:
+      app: wil-playground              # le Deployment gère les pods portant cette étiquette
+  template:
+    metadata:
+      labels:
+        app: wil-playground            # l'étiquette posée sur le pod
+    spec:
+      containers:
+        - name: wil-playground
+          image: wil42/playground:v1   # l'appli de Wil, version v1 (à changer en v2)
+          ports:
+            - containerPort: 8888      # l'appli de Wil écoute sur 8888
+---
+# --- Service : une adresse fixe pour joindre le pod -----------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: wil-playground
+spec:
+  type: LoadBalancer                   # ouvre le port 8888 sur le nœud,
+                                       # pour que "curl localhost:8888" marche depuis IOT
+  selector:
+    app: wil-playground                # envoie vers le pod portant cette étiquette
+  ports:
+    - port: 8888                       # Service:8888 -> conteneur:8888
       targetPort: 8888
+
